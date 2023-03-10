@@ -1,12 +1,24 @@
 # Intento 1 de un algoritmo genetico
 # CPA 2023
 
-BITS <- 40
-OBJETIVO <- 12
-TAMANO_POBLACION <- 10000
-SOBREVIVIENTES <- 500
+BITS <- 10
+OBJETIVO <- 10
+TAMANO_POBLACION <- 20
 GENERACIONES <- 20
 MUTACION_FREC <- 0.01
+PROB_CRUZA <- 0.8
+
+fitness_eval_onemax <- function(individuo){
+  fitscore <- sum(individuo)/OBJETIVO
+  return(fitscore)
+}
+
+fitness_eval_population <- function(population,fitness_eval){
+  fit_pop <- apply(population,1,fitness_eval)
+  fit_propo <- fit_pop/sum(fit_pop)
+  fit_propo_sum <- cumsum(fit_propo)
+  return(list(fit_pop, fit_propo, fit_propo_sum))
+}
 
 individual_create <- function(bits){
   indi <- sample(c(0,1), size = bits, replace = T)
@@ -14,35 +26,36 @@ individual_create <- function(bits){
 }
 
 pop_create <- function(pob_size,bits) {
-  my_pop <- list()
+  my_pop <- c()
   for (i in 1:pob_size){
-    indi <- individual_create(bits)
-    my_pop[[i]] <- indi
+    ind <- individual_create(bits)
+    my_pop <- rbind(my_pop,ind)
   }
+  rownames(my_pop) <- c(1:nrow(my_pop))
   return(my_pop)
 }
 
-fitness_eval <- function(individuo, objetivo){
-  dist_al_objetivo <- abs(objetivo - sum(individuo))
-  return(dist_al_objetivo)
-}
-
-make_mutation <- function(mut_frecuency, individuo){
-  mutate <- sample(c(TRUE,FALSE),size = 1, prob = c(mut_frecuency,1-mut_frecuency))
+make_gene_mutation <- function(gene){
+  mutate <- sample(c(TRUE,FALSE),size = 1, prob = c(MUTACION_FREC,1-MUTACION_FREC))
   if(mutate){
-    where <- sample(c(1:length(individuo)),size = 1)
-    if (individuo[where] == 0 ){
-      individuo[where] <- 1
+    if ( gene == 0 ){
+      gene <- 1
     }
     else {
-      individuo[where] <- 0
+      gene <- 0
     }
   }
+  return(gene)
 }
 
-make_babies <- function(){}
+mutate_population <- function(population){
+  mp <- apply(population,c(1,2),make_gene_mutation)
+  return(mp)
+}
+
+make_babies <- function(PROB_CRUZA, poblacion){}
 
 
-natural_selection <- function(poblacion, sobrevivientes){
+proportional_selection <- function(poblacion){
 
 }
