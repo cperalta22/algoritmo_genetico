@@ -56,6 +56,10 @@ mutate_population <- function(population){
 make_babies <- function(PROB_CRUZA, poblacion){}
 
 
-proportional_selection <- function(poblacion){
+proportional_selection <- function(poblacion, fitness_eval){
+  eval_metrics <- fitness_eval_population(poblacion, fitness_eval)
+  cumulative_proportions <- eval_metrics[[3]]
+  for (i in 1:nrow(poblacion)){
 
+  }
 }
