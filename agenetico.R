@@ -8,6 +8,9 @@ GENERACIONES <- 20
 MUTACION_FREC <- 0.01
 PROB_CRUZA <- 0.8
 
+LOTTO <- seq(0,1,0.001)
+
+
 fitness_eval_onemax <- function(individuo){
   fitscore <- sum(individuo)/OBJETIVO
   return(fitscore)
@@ -58,8 +61,10 @@ make_babies <- function(PROB_CRUZA, poblacion){}
 
 proportional_selection <- function(poblacion, fitness_eval){
   eval_metrics <- fitness_eval_population(poblacion, fitness_eval)
-  cumulative_proportions <- eval_metrics[[3]]
-  for (i in 1:nrow(poblacion)){
-
+  cumulative_proportions <- as.vector(eval_metrics[[3]])
+  lotto_tickets <- sample(LOTTO,nrow(poblacion))
+  for (ticket in lotto_tickets){
+    winner <- max(cumulative_proportions[cumulative_proportions <= ticket ])
+    whowon <- which(cumulative_proportions == winner)
   }
 }
