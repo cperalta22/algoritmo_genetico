@@ -1,12 +1,12 @@
 # Intento 1 de un algoritmo genetico
 # CPA 2023
 
-BITS <- 10
-OBJETIVO <- 10
-TAMANO_POBLACION <- 20
-GENERACIONES <- 20
-MUTACION_FREC <- 0.01
-PROB_CRUZA <- 0.8
+BITS              <- 10
+OBJETIVO          <- 10
+TAMANO_POBLACION  <- 20
+GENERACIONES      <- 20
+MUTACION_FREC     <- 0.01
+PROB_CRUZA        <- 0.8
 
 LOTTO <- seq(0,1,0.001)
 
@@ -61,10 +61,16 @@ make_babies <- function(PROB_CRUZA, poblacion){}
 
 proportional_selection <- function(poblacion, fitness_eval){
   eval_metrics <- fitness_eval_population(poblacion, fitness_eval)
+<<<<<<< HEAD
   cumulative_proportions <- as.vector(eval_metrics[[3]])
   lotto_tickets <- sample(LOTTO,nrow(poblacion))
   for (ticket in lotto_tickets){
     winner <- max(cumulative_proportions[cumulative_proportions <= ticket ])
     whowon <- which(cumulative_proportions == winner)
   }
+=======
+  cumulative_proportions <- eval_metrics[[3]]
+  for (i in 1:nrow(poblacion)){
+ }
+>>>>>>> 2e487c1d358f6f4fba4b2c49e4b0d88576cbfaf4
 }
