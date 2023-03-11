@@ -1,12 +1,12 @@
 # Intento 1 de un algoritmo genetico
 # CPA 2023
 
-BITS <- 10
-OBJETIVO <- 10
-TAMANO_POBLACION <- 20
-GENERACIONES <- 20
-MUTACION_FREC <- 0.01
-PROB_CRUZA <- 0.8
+BITS              <- 10
+OBJETIVO          <- 10
+TAMANO_POBLACION  <- 20
+GENERACIONES      <- 20
+MUTACION_FREC     <- 0.01
+PROB_CRUZA        <- 0.8
 
 fitness_eval_onemax <- function(individuo){
   fitscore <- sum(individuo)/OBJETIVO
@@ -60,6 +60,5 @@ proportional_selection <- function(poblacion, fitness_eval){
   eval_metrics <- fitness_eval_population(poblacion, fitness_eval)
   cumulative_proportions <- eval_metrics[[3]]
   for (i in 1:nrow(poblacion)){
-
-  }
+ }
 }
