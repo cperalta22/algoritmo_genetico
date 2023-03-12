@@ -3,7 +3,7 @@
 
 BITS              <- 100
 OBJETIVO          <- 10
-TAMANO_POBLACION  <- 20
+TAMANO_POBLACION  <- 20 # TODO hay varios errores respecto a indexacion entre mayor sea la poblaciòn
 GENERACIONES      <- 50
 MUTACION_FREC     <- 0.01
 PROB_CRUZA        <- 0.8
