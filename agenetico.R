@@ -2,19 +2,20 @@
 # CPA 2023
 
 BITS              <- 100
-OBJETIVO          <- 10
-TAMANO_POBLACION  <- 20 # TODO hay varios errores respecto a indexacion entre mayor sea la poblaciòn
-GENERACIONES      <- 50
+OBJETIVO          <- 100
+TAMANO_POBLACION  <- 1000
+GENERACIONES      <- 500
 MUTACION_FREC     <- 0.01
 PROB_CRUZA        <- 0.8
 ELITISMO          <- TRUE
 FITNESS_EVAL      <- "onemax"
-LOTTO             <- seq(0,1,0.001)
 
 onemax <- function(individuo){
-  fitscore <- sum(individuo)/BITS
+  fitscore <- sum(individuo)
   return(fitscore)
 }
+
+fetch_binary_target <- function{}#TODO
 
 fitness_eval_population <- function(population){
   fit_pop <- apply(population,1,FITNESS_EVAL)
@@ -52,10 +53,10 @@ proportional_selection <- function(poblacion){
   whowon <-c()
   eval_metrics <- fitness_eval_population(poblacion)
   cumulative_proportions <- as.vector(eval_metrics[[3]])
-  lotto_tickets <- sample(LOTTO,nrow(poblacion))
+  lotto_tickets <- sample(seq(min(cumulative_proportions),1,0.0001),nrow(poblacion))
   for (ticket in lotto_tickets){
-    winner <- min(cumulative_proportions[cumulative_proportions >= ticket ])
-    whowon <- c(whowon,which(cumulative_proportions == winner))
+    winner <- sort(cumulative_proportions[cumulative_proportions >= ticket ])[1]
+    whowon <- c(whowon,which(cumulative_proportions == winner)[1])
   }
   new_pop <- poblacion[whowon,]
   rownames(new_pop) <- c(1:nrow(new_pop))
@@ -110,7 +111,15 @@ make_babies <- function(poblacion){
   return(new_generation)
 }
 
-algogen <- function(){
+algogen <- function(bits = BITS,
+                    objetivo = OBJETIVO,
+                    pop_size = TAMANO_POBLACION,
+                    generaciones = GENERACIONES,
+                    prop_cruza = PROB_CRUZA,
+                    frec_mutacion = MUTACION_FREC,
+                    elitismo = ELITISMO,
+                    fitness_function = FITNESS_EVAL
+                    ){
   meanFS <- c()     # para guardar el fitness score promedio de cada generacion
   bestFS <- c()  # para guardar el mejor fitness score de cada generacion
   bestInd <-c() # mejor individuo
@@ -124,6 +133,9 @@ algogen <- function(){
     meanFS <- c(meanFS, ps[[4]])
     bestInd <- ps[[3]]
     pob <- make_babies(pob)
+    if(ps[[2]]==OBJETIVO){
+      break
+    }
   }
   return(list(
               bestFS, # 1 vector de mejores fitness score
@@ -133,4 +145,3 @@ algogen <- function(){
          )
 }
 
-ag <- algogen()
