@@ -15,7 +15,6 @@ onemax <- function(individuo){
   return(fitscore)
 }
 
-fetch_binary_target <- function{}#TODO
 
 fitness_eval_population <- function(population){
   fit_pop <- apply(population,1,FITNESS_EVAL)

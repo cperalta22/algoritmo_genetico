@@ -15,26 +15,21 @@ rownames(binmatrix) <- c(1:nrow(binmatrix))
 # Como primer inento voy a intentar penalizar la distancia lineal despues la distancia
 # en mutaciones y finalmente la distancia en bits cada una penalizando mas que la anterior
 
-fit1 <- function(dlin,dmut,dbit){
-  fs <- ((1/(1+dlin))/(1+dmut))/(1+dbit)
+fit3dist <- function(d1,d2,d3){
+  fs <- (1/(1+d1)/(1+d2))/(1+d3)
   return(fs)
 }
 
-fit2 <- function(dlin,dbit){
-  fs <- (1/(1+dlin))/(1+dbit)
+fit2dist <- function(d1,d2){
+  fs <- (1/(1+d1))/(1+d2)
   return(fs)
 }
 
-target <- 1500
-targetbin <- as.numeric(intToBin(target))
-targetgenesum <- sum(as.numeric(unlist(strsplit(intToBin(target),split = ""))))
-targetBinVector <- as.numeric(unlist(strsplit(intToBin(target),split = "")))
-targetbit <- floor(log2(target))+1
-
-otbv <- targetBinVector
-while(length(targetBinVector) < length(binmatrix[1,])){
-  targetBinVector <- c(0,targetBinVector)
+fit1dist <- function(d1){
+  fs <- (1/1+d1)
+  return(fs)
 }
+
 
 asBin <- function(x){
   as.numeric(intToBin(x))
@@ -52,21 +47,37 @@ getLinearDistance <- function(target,x){
   abs(target-x)
 }
 
-getMutationalDistance <- function(targetGeneSum, xGeneSum){
-  abs(targetGeneSum-xGeneSum)
-}
-
 getBitDistance <- function(targetBitCount,XbitCount){
   abs(targetBitCount-XbitCount)
 }
 
-getMutDist <- function(matrix){
-  apply(matrix,1,function(x)sum(targetBinVector!=x))
+getBinaryAttributes <- function(target){
+  binvec <- as.numeric(unlist(strsplit(intToBin(target),split = "")))
+  if (length(binvec) > BITS){
+    print("ERROR: variable BITS de tamaño insuficiente para expresar el OBJETIVO")
+    binvec <- NULL
+  } else {
+    while(length(binvec) < BITS){
+      binvec <- c(0,binvec)
+   }
+    bits <- floor(log2(target))+1
+  }
+  return(list(binvec,bits))
+}
+
+getMutationalDistance <- function(matrix){
+  BinVector <- getBinaryAttributes(OBJETIVO)[[1]]
+  apply(matrix,1,function(x)sum(BinVector!=x))
 }
 
 
-dl <- getLinearDistance(target,decs)
-geneSums <- as.vector(rowSums(binmatrix))
-fdm <- getMutationalDistance(targetgenesum,geneSums)
-db <- getBitDistance(targetbit,bitsInDecs)
-dm <- getMutDist(binmatrix)
+## dl <- getLinearDistance(target,decs)
+## dm <- getMutationalDistance(binmatrix)
+## db <- getBitDistance(targetbit,bitsInDecs)
+
+
+findbinary <- function(target){
+
+
+}
+
