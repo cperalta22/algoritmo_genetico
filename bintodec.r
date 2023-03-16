@@ -25,10 +25,16 @@ fit2 <- function(dlin,dbit){
   return(fs)
 }
 
-target <- 260
+target <- 1500
 targetbin <- as.numeric(intToBin(target))
 targetgenesum <- sum(as.numeric(unlist(strsplit(intToBin(target),split = ""))))
+targetBinVector <- as.numeric(unlist(strsplit(intToBin(target),split = "")))
 targetbit <- floor(log2(target))+1
+
+otbv <- targetBinVector
+while(length(targetBinVector) < length(binmatrix[1,])){
+  targetBinVector <- c(0,targetBinVector)
+}
 
 asBin <- function(x){
   as.numeric(intToBin(x))
@@ -54,8 +60,13 @@ getBitDistance <- function(targetBitCount,XbitCount){
   abs(targetBitCount-XbitCount)
 }
 
+getMutDist <- function(matrix){
+  apply(matrix,1,function(x)sum(targetBinVector!=x))
+}
+
 
 dl <- getLinearDistance(target,decs)
 geneSums <- as.vector(rowSums(binmatrix))
-dm <- getMutationalDistance(targetgenesum,geneSums)
+fdm <- getMutationalDistance(targetgenesum,geneSums)
 db <- getBitDistance(targetbit,bitsInDecs)
+dm <- getMutDist(binmatrix)
