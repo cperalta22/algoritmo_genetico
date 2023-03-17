@@ -1,14 +1,17 @@
 # Intento 1 de un algoritmo genetico
 # CPA 2023
 
-BITS              <- 100
-OBJETIVO          <- 100
-TAMANO_POBLACION  <- 1000
-GENERACIONES      <- 500
-MUTACION_FREC     <- 0.01
-PROB_CRUZA        <- 0.8
-ELITISMO          <- TRUE
-FITNESS_EVAL      <- "onemax"
+BITS                <- 50
+OBJETIVO            <- 22
+TAMANO_POBLACION    <- 100
+GENERACIONES        <- 100
+MUTACION_FREC       <- 0.01
+PROB_CRUZA          <- 0.8
+ELITISMO            <- TRUE
+FITNESS_EVAL        <- "findDecimal" # "onemax" , "findDecimal"
+
+
+source("./bintodec.r")
 
 onemax <- function(individuo){
   fitscore <- sum(individuo)
@@ -110,18 +113,19 @@ make_babies <- function(poblacion){
   return(new_generation)
 }
 
-algogen <- function(bits = BITS,
-                    objetivo = OBJETIVO,
-                    pop_size = TAMANO_POBLACION,
-                    generaciones = GENERACIONES,
-                    prop_cruza = PROB_CRUZA,
-                    frec_mutacion = MUTACION_FREC,
-                    elitismo = ELITISMO,
-                    fitness_function = FITNESS_EVAL
-                    ){
+
+findDecimal <- function(individuo){
+  dl <- getLinearDistance(OBJETIVO, BinToDec(individuo))
+  dm <- getMutationalDistance(individuo,getBinVector(OBJETIVO,BITS))
+  db <- getBitDistance(getBitCount(OBJETIVO),getBitCount(BinToDec(individuo)))
+  fs <- fit2dist(dm,db)
+  return(fs)
+}
+
+algogen <- function(){
   meanFS <- c()     # para guardar el fitness score promedio de cada generacion
-  bestFS <- c()  # para guardar el mejor fitness score de cada generacion
-  bestInd <-c() # mejor individuo
+  bestFS <- c()     # para guardar el mejor fitness score de cada generacion
+  bestInd <-c()     # mejor individuo
 
   pob <- pop_create()
 
@@ -132,9 +136,9 @@ algogen <- function(bits = BITS,
     meanFS <- c(meanFS, ps[[4]])
     bestInd <- ps[[3]]
     pob <- make_babies(pob)
-    if(ps[[2]]==OBJETIVO){
-      break
-    }
+    ## if(ps[[2]]==1){
+    ##   break
+    ## }
   }
   return(list(
               bestFS, # 1 vector de mejores fitness score
